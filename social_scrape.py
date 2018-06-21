@@ -1,6 +1,7 @@
 import bs4 import BeautifulSoup
 from extract_social_media import find_links_tree
 from html_to_etree import parse_html_bytes
+import queue
 import requests
 
 def find_social_links(url) -> set:
@@ -21,12 +22,17 @@ def page_links(html_cnt) -> set:
             links.add(link['href'])
     return links
 
-def bfs(url) -> set :
-    social_links = find_social_links(url)
-    if (len(social_links) > 0):
-        return social_links
-    else:
-        response = requests.get(url)
-        links
+def bfs(url) -> set:
+    queue = []
+    queue.append(url)
+    queue[url] = True
+    while queue:
+        social_links = find_social_links(url)
+        if (len(social_links) > 0):
+            return social_links
+        else:
+            response = requests.get(url)
+            links = page_links(response)
+
 
 if __name__ == "__main__":
